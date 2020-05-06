@@ -1,5 +1,7 @@
 <?php
 	session_start();
+    if(!isset($_SESSION["credenziali"]))
+        header("Location:accesso.php");
 ?>
 <html>
   <head>
@@ -25,10 +27,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li>
-            <a class="nav-link" href="bacheca.php">Bacheca <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="paginaUtente.php">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,6 +37,7 @@
               <a class="dropdown-item" href="#" onclick="showLink('links','availableVot')">Votazioni disponibili</a>
               <a class="dropdown-item" href="#" onclick="showLink('links','endedVot')">Votazioni concluse</a>
               <a class="dropdown-item" href="#" onclick="showLink('links','currentVot')">Votazioni in corso</a>
+              <a class="dropdown-item amministratore" href="#" onclick="showLink('links','pendingVot')">Votazioni pendenti</a>
               <div class="utente">
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#" onclick="showLink('links','proposeVot')">Proponi votazione</a>
@@ -53,12 +53,19 @@
             <a class="nav-link" href="#" onclick="showLink('links','showUser')">Utenti</a>
           </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+              <form class="my-lg-0" method="POST" action="paginaUtentePHP.php">
+                  <input class="btn btn-danger" type="submit" name="logout" value="Logout">
+              </form>
+          </li>
+        </ul>
       </div>
     </nav>
     <br><br><br>
 
     <!--Form che permette di inserire i dati relativi alla creazione di una votazione-->
-    <div class="createVot proposeVot links text-center exactCenter">
+    <div class="createVot proposeVot links text-center exactCenter prova">
         <form method="POST" action="paginaUtentePHP.php">
             <div class="form-group">
               <label for="Titolo">Titolo:</label>
@@ -99,10 +106,10 @@
             </div>
             <br>
             <div class="createVot links text-center">
-                <input class="btn btn-info" type="submit" name="votCreation" value="Crea votazione">
+                <input class="btn btn-warning" type="submit" name="votCreation" value="Crea votazione">
             </div>
             <div class="proposeVot links text-center">
-                <input class="btn btn-info" type="submit" name="votProposal" value="Proponi votazione">
+                <input class="btn btn-warning" type="submit" name="votProposal" value="Proponi votazione">
             </div>
         </form>  
     </div>
@@ -116,12 +123,12 @@
           $credenziali=$_SESSION["credenziali"];
           $CF=$credenziali["CF"];
           $codice=user_code($db, $CF);
-          $votazioniT=$votazioniT=votQuery($db, $codice, "in_corso", 0);
+          $votazioniT=votQuery($db, $codice, "in_corso", 0);
 
           if($votazioniT!==NULL)
             {?>
             <div style="overflow-x:auto;">
-                <table class="table-info votTable">
+                <table class="table-info tableBack votTable">
                     <thead>
                       <tr class="header">
                             <th onclick="sortTable(0,0)">Titolo <img src="css/arrows.png"></th>
@@ -170,7 +177,7 @@
     <div class="endedVot links">
         <input type="text" class="form-control searchInput" placeholder="Cerca la votazione che ti interessa">
         <div style="overflow-x:auto;">
-            <table class="table-info votTable">
+            <table class="table-info tableBack votTable">
                 <thead>
                   <tr class="header">
                         <th onclick="sortTable(0,1)">Titolo <img src="css/arrows.png"></th>
@@ -194,7 +201,7 @@
     <div class="currentVot links">
         <input type="text" class="form-control searchInput" placeholder="Cerca la votazione che ti interessa">
         <div style="overflow-x:auto;">
-            <table class="table-info votTable">
+            <table class="table-info tableBack votTable">
                 <thead>
                   <tr class="header">
                         <th onclick="sortTable(0,2)">Titolo <img src="css/arrows.png"></th>
@@ -214,6 +221,106 @@
             </table>
         </div>
     </div>
+
+
+      <div class="pendingVot links">
+        <input type="text" class="form-control searchInput" placeholder="Search for names..">
+        <?php
+          require_once("commonFunctions.php");
+          $credenziali=$_SESSION["credenziali"];
+          $CF=$credenziali["CF"];
+
+          $votazioniT=mysqli_query($db, "SELECT nome, cognome, titolo, quesito.testoQ, scadenza, percMinima, astensione, votoChiaro
+                                         FROM quesito JOIN (utente JOIN propone ON utente.codice=propone.codice) 
+                                         ON stato='pendente' AND quesito.testoQ=propone.testoQ");
+          
+          if($votazioniT!==NULL)
+            {?>
+            <div style="overflow-x:auto;">
+                <table class="table-info tableBack votTable">
+                    <thead>
+                      <tr class="header">
+                            <th onclick="sortTable(0,3)">Utente <img src="css/arrows.png"></th>
+                            <th onclick="sortTable(1,3)">Titolo <img src="css/arrows.png"></th>
+                            <th onclick="sortTable(2,3)">Testo <img src="css/arrows.png"></th>
+                            <th onclick="sortTable(3,3)">Scadenza <img src="css/arrows.png"></th>
+                            <th onclick="sortTable(4,3)">Percentuale minima <img src="css/arrows.png"></th>
+                            <th onclick="sortTable(5,3)">Astensione<img src="css/arrows.png"></th>
+                            <th onclick="sortTable(6,3)">Voto in chiaro<img src="css/arrows.png"></th>
+                            <th onclick="sortTable(7,3)">Risposte<img src="css/arrows.png"></th>
+                            <th>Approva</th>
+                            <th>Elimina</th>
+                      </tr>
+                    </thead>
+                    <tbody class="searchTable">
+                      <?php
+                      for($votazioniR=mysqli_fetch_assoc($votazioniT);$votazioniR!=null;$votazioniR=mysqli_fetch_assoc($votazioniT))
+                            {                          
+                            $testoQ=$votazioniR["testoQ"];
+
+                            $risposteT=mysqli_query($db, "SELECT testoR
+                                                          FROM risposta
+                                                          WHERE testoQ='$testoQ'");
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $votazioniR["nome"]."<br>".$votazioniR["cognome"];?>
+                                </td>
+                                <td>
+                                    <?php echo $votazioniR["titolo"];?>
+                                </td>
+                                <td>
+                                    <?php echo $testoQ;?>
+                                </td>
+                                <td>
+                                    <?php echo $votazioniR["scadenza"];?>
+                                </td>
+                                <td>
+                                    <?php echo $votazioniR["percMinima"];?>
+                                </td>
+                                <td>
+                                    <?php echo $votazioniR["astensione"];?>
+                                </td>
+                                <td>
+                                    <?php echo $votazioniR["votoChiaro"];?>
+                                </td>
+                                <td>
+                                    <?php 
+                                    
+                                    for($risposteR=mysqli_fetch_assoc($risposteT);$risposteR!=null;$risposteR=mysqli_fetch_assoc($risposteT)) 
+                                        {
+                                        echo $risposteR["testoR"].";<br>";
+                                        }
+                                        ?>
+                                </td>
+                                <td>
+                                    <form method="POST" action="paginaUtentePHP.php">
+                                        <input type="hidden" name="pendingVotText" value="<?php echo $testoQ; ?>"/>
+                                        <input class="btn btn-success" type="submit" name="approvePendingVot" value="Approva"/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="POST" action="paginaUtentePHP.php">
+                                        <input type="hidden" name="pendingVotText" value="<?php echo $testoQ; ?>"/>
+                                        <input class="btn btn-danger" type="submit" name="erasePendingVot" value="Elimina"/>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                            }
+                      ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php
+            }
+           else
+            echo "Non sono disponibili nuove votazioni";
+            ?>
+    </div>
+
+
+
 
 
     <!--Form che permette di invitare nuovi utenti tramite l'inserimento del loro indirizzo email-->
@@ -236,18 +343,18 @@
         require_once("commonFunctions.php");
 
         $utenteT=mysqli_query($db, "SELECT nome, cognome, email, codice
-                                    FROM Utente
+                                    FROM utente
                                     WHERE cancellato=0 && CF!='$CF'");
         
         if($utenteT)
             {?>
             <div style="overflow-x:auto;">
-                <table class="table-info votTable">
+                <table class="table-info tableBack votTable">
                     <thead>
                         <tr class="header">
-                            <th onclick="sortTable(0,3)">Nome<img src="css/arrows.png"></th>
-                            <th onclick="sortTable(1,3)">Cognome<img src="css/arrows.png"></th>
-                            <th onclick="sortTable(2,3)">Email<img src="css/arrows.png"></th>
+                            <th onclick="sortTable(0,4)">Nome<img src="css/arrows.png"></th>
+                            <th onclick="sortTable(1,4)">Cognome<img src="css/arrows.png"></th>
+                            <th onclick="sortTable(2,4)">Email<img src="css/arrows.png"></th>
                             <th>Elimina</th>
                         </tr>
                     </thead>
@@ -291,13 +398,13 @@
 
         /*Codice che controlla le controlla le credenziali inserite, se l'utente é amministratore ecc*/
     	if(isset($_SESSION["credenziali"]))
-        	{
+            {
             $credenziali=$_SESSION["credenziali"];
             $CF=$credenziali["CF"];
             $password=$credenziali["password"];
 
             $utenteT=mysqli_query($db, "SELECT nome, cognome
-                            		    FROM Utente
+                            		    FROM utente
                            		        WHERE CF='$CF' AND password='$password'"); 
 
             $utenteR=mysqli_fetch_array($utenteT, MYSQLI_ASSOC);  
@@ -307,16 +414,15 @@
             $adminR=adminQuery($db, $CF); 
       
             if($adminR!==NULL)
-              {
-        	  ?><script>hidShow('block', 'none');</script><?php
+                {
+        	    ?><script>hidShow('block', 'none');</script><?php
+                }
+                else
+                {
+        	    ?><script>hidShow('none', 'block');</script><?php
+                }
               }
-             else
-              {
-        	  ?><script>hidShow('none', 'block');</script><?php
-              }
-            }
-           else
-            header("Location:accesso.php");
+            
 
         /**
          *Funzione che esegue la query per ottenere il codice dell'utente.
@@ -360,8 +466,8 @@
         function adminQuery($db, $CF)
             {
             $adminT=mysqli_query($db, "SELECT *
-                             		   FROM Utente JOIN Amministratore 
-                                       			   ON Utente.codice=Amministratore.codice AND CF='$CF'"); 
+                             		   FROM utente JOIN amministratore 
+                                       			   ON utente.codice=amministratore.codice AND CF='$CF'"); 
 
             $adminR=mysqli_fetch_array($adminT, MYSQLI_ASSOC); 
             return $adminR;
@@ -421,7 +527,7 @@
                     }
                 }
                else
-                echo "Non sono disponibili votazioni in corso";
+                echo "Niente di nuovo";
             }
     ?> 
   </body>

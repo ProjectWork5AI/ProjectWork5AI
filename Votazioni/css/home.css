@@ -9,13 +9,16 @@ h1
     margin-bottom: 100%;
 	}
 
-    
-.back
-	{
-    background-color: #52a7c1;
-	background-image: linear-gradient(315deg, #52a7c1 0%, #b3f6d8 74%); 
-    height:100%;
-    }
+
+.back {
+    background-image: url("background.png");
+    height: 100%;
+}
+
+
+a {
+color: blue;
+}
 
 .exactCenter 
 	  {

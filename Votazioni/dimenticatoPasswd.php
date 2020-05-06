@@ -42,7 +42,7 @@
         require_once("commonFunctions.php");
       	$CF=$_SESSION['CF'];
       	$password=hash("sha512", $_POST['password']);
-      	mysqli_query($db, "UPDATE Utente
+      	mysqli_query($db, "UPDATE utente
           		 		   SET password='$password'
                            WHERE CF='$CF'"); 
      	header("Location:accesso.php");

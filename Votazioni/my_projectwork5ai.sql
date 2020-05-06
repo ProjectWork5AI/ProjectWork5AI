@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Apr 15, 2020 alle 17:28
+-- Creato il: Mag 06, 2020 alle 16:05
 -- Versione del server: 10.4.11-MariaDB
 -- Versione PHP: 7.4.3
 
@@ -37,7 +37,8 @@ CREATE TABLE `amministratore` (
 --
 
 INSERT INTO `amministratore` (`codice`) VALUES
-('s31sc3m0');
+('s31sc3m0'),
+('SoIQmACWtj');
 
 -- --------------------------------------------------------
 
@@ -106,7 +107,7 @@ INSERT INTO `partecipa` (`codice`, `testoQ`, `presente`, `astenuto`) VALUES
 ('c1p0LL1n0', 'Testo9', 1, 0),
 ('GIp8m3sUnT', 'Testo9', 0, 0),
 ('m1p14c3l4', 'Testo9', 0, 0),
-('s31sc3m0', 'Testo9', 0, 0),
+('s31sc3m0', 'Testo9', 1, 0),
 ('SoIQmACWtj', 'Testo9', 0, 0);
 
 -- --------------------------------------------------------
@@ -186,7 +187,7 @@ INSERT INTO `risposta` (`testoR`, `votiFavorevoli`, `testoQ`) VALUES
 ('opzione3.3', 4, 'Testo3'),
 ('opzione2.1', 0, 'Testo2'),
 ('opzione9.1', 0, 'Testo9'),
-('opzione9.2', 1, 'Testo9'),
+('opzione9.2', 2, 'Testo9'),
 ('opzione9.3', 0, 'Testo9');
 
 -- --------------------------------------------------------
@@ -212,7 +213,7 @@ CREATE TABLE `utente` (
 INSERT INTO `utente` (`CF`, `nome`, `cognome`, `password`, `email`, `cancellato`, `codice`) VALUES
 ('MSSBNC01L71D969F', 'Bianca', 'Massone', 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db', 'biancamassone@gmail.com', 0, 'c1p0LL1n0'),
 ('STCNDR02A02D969D', 'Andrea', 'Stucchi', 'a0c299b71a9e59d5ebb07917e70601a3570aa103e99a7bb65a58e780ec9077b1902d1dedb31b1457beda595fe4d71d779b6ca9cad476266cc07590e31d84b206', 'andrea.stucchi02@gmail.com', 0, 's31sc3m0'),
-('RDLTTR01B24D969Z', 'Ettore', 'Rodella', '0a6f9ebaa55e21ce270b6df2e7d812c987d511ab0472d24b501622b5878f9e4b03011356f3c9f85b084cf763a995a93f142d5107fa9a92d8e60e78d3c96a614a', 'ettore.rodella@gmail.com', 0, 'GIp8m3sUnT'),
+('RDLTTR01B24D969Z', 'Ettore', 'Rodella', '0a6f9ebaa55e21ce270b6df2e7d812c987d511ab0472d24b501622b5878f9e4b03011356f3c9f85b084cf763a995a93f142d5107fa9a92d8e60e78d3c96a614a', 'a.stucchi002@gmail.com', 0, 'GIp8m3sUnT'),
 ('STCLCU94T22D969N', 'Luca', 'Stucchi', '77516558eb5b721f351abe23997ea152a7d4562babbafbbfeae7e84df59d1f41ce3954d8fb91f60cb1b7221c57d3d8732611d7334c5cc4dc7dfdccc01ee70e4e', 'stucchi19@gmail.com', 0, 'SoIQmACWtj'),
 ('CNTMTT01H06D451Y', 'Matteo', 'Conti', '3b69dac934519ed342c2a6f201249e22f6b29769c3f2974907036f3934b9527ee3b60a299272695b3bfa56e6cdcd44b4c9a7b3a717ed581195b3120dcb270a64', 'spamduemilauno@gmail.com', 0, 'm1p14c3l4');
 
@@ -236,7 +237,8 @@ INSERT INTO `vota` (`codice`, `testoR`, `testoQ`) VALUES
 ('c1p0LL1n0', 'opzione8.2', 'Testo8'),
 ('c1p0LL1n0', 'opzione9.2', 'Testo9'),
 ('s31sc3m0', 'opzione6.2', 'testo6'),
-('s31sc3m0', 'opzione8.1', 'Testo8');
+('s31sc3m0', 'opzione8.1', 'Testo8'),
+('s31sc3m0', 'opzione9.2', 'Testo9');
 
 --
 -- Indici per le tabelle scaricate
@@ -297,6 +299,10 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` EVENT `votScaduta` ON SCHEDULE EVERY 1 MINUTE STARTS '2020-04-04 14:29:34' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE quesito
   SET stato="scaduta"
   WHERE scadenza<CURRENT_TIMESTAMP$$
+
+CREATE DEFINER=`root`@`localhost` EVENT `votInScadenza` ON SCHEDULE EVERY 1 MINUTE STARTS '2020-05-06 10:04:46' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE quesito
+SET stato="in_scadenza"
+WHERE CURRENT_TIMESTAMP>DATE_SUB(scadenza, INTERVAL 2 DAY) AND CURRENT_TIMESTAMP<scadenza$$
 
 DELIMITER ;
 COMMIT;

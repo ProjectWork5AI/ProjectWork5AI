@@ -1,5 +1,9 @@
 <?php
 	session_start();
+    if(!isset($_SESSION["credenziali"]))
+        header("Location:accesso.php");
+    if(!isset($_POST["partecipa"]))
+        header("Location:accesso.php");
 ?>
 <html>
   <head>
@@ -65,8 +69,8 @@
             $actualQ=$_POST["choosenQ"];
 
             $adminT=mysqli_query($db, "SELECT *
-                             		   FROM Utente JOIN Amministratore 
-                                       			   ON Utente.codice=Amministratore.codice AND CF='$CF'"); 
+                             		   FROM utente JOIN amministratore 
+                                       			   ON utente.codice=amministratore.codice AND CF='$CF'"); 
 
             $adminR=mysqli_fetch_array($adminT, MYSQLI_ASSOC);  
             if($adminR!==NULL)
@@ -117,8 +121,6 @@
             </div>
             <?php
             }
-           else
-            header("Location:accesso.php");
 
         if(isset($_POST["votato"]) || isset($_POST["astenuto"]))
             {

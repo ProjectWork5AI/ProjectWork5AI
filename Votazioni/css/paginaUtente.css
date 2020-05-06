@@ -5,15 +5,11 @@ body
 
 h1 
 	{
-  	color: red;
+  	color: black;
     margin-top: 4%;
 	}
 
     
-.back
-	{
-	background: linear-gradient(315deg, #52a7c1 0%, #b3f6d8 74%); 
-    }
 
 nav
 	{
@@ -33,11 +29,6 @@ nav
 .links 
     {
     display: none;
-    }
-
-textarea
-    {
-    resize: none;
     }
 
 td>form 
@@ -84,3 +75,8 @@ th>img
     {
     cursor: pointer;
     }
+
+.tableBack {
+    background: rgb(201,96,47);
+    background: linear-gradient(266deg, rgba(201,96,47,1) 5%, rgba(208,114,13,1) 31%, rgba(233,208,9,1) 98%);
+}

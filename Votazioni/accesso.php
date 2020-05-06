@@ -30,7 +30,7 @@
       </div>
     </nav>
 
-    <div class="text-center exactCenter">
+    <div class="text-center exactCenter prova">
       <form method="POST" action="#">
           <div class="form-group">
               <label for="C.F.">C.F.:</label>
@@ -40,7 +40,7 @@
               <label for="pwd">Password:</label>
               <input type="password" class="form-control" id="pwd" name="password" required>
             </div>
-          <input class="btn btn-info" type="submit" name="accedi" value="Accedi">
+          <input class="btn btn-warning" type="submit" name="accedi" value="Accedi">
       </form>
       <a id="openInvite" href="#">Hai dimenticato la password?</a>
       <div class="form-popup" id="myForm">
@@ -66,7 +66,7 @@
       	$CF=$_POST['CF'];
         $password=hash("sha512", $_POST['password']);
         $checkTable=mysqli_query($db, "SELECT *
-                                       FROM Utente
+                                       FROM utente
                                        WHERE CF='$CF' AND password='$password'");
         $row=mysqli_fetch_array($checkTable, MYSQLI_ASSOC); 
         if($row!==NULL)
@@ -82,7 +82,7 @@
         require_once("commonFunctions.php");
         $CF=$_POST['CF'];
         $table=mysqli_query($db, "SELECT email
-                                  FROM Utente
+                                  FROM utente
                                   WHERE CF='$CF'");  
         $row = mysqli_fetch_array($table, MYSQLI_ASSOC); 
         if($row!==NULL)
@@ -90,13 +90,10 @@
           $to_email=$row['email'];
           $subject='Richiesta di modifica password';
           $message='Cliccare sul link che segue per modificare la password: https://projectwork5ai.altervista.org/votazioni/dimenticatoPasswd.php';
-          $headers='From: ProjectWork5AInoreply @ company . com';
+          $headers='From: projectwork5ai@gmail.com';
           mail($to_email,$subject,$message,$headers);
           $_SESSION["CF"]=$CF;
-          echo "<script type='text/javascript'>alert('Email inviata con successo');</script>"; 
           }
-         else
-           echo "<script type='text/javascript'>alert('Il CF inserito non risulta associato a nessun account');</script>"; 
         }
     ?>
   </body>

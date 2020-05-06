@@ -24,7 +24,7 @@
     </nav>
       <div class="col-sm align-self-center exactCenter">
         <form method="POST" action="#">
-          <input class="btn btn-info" type="submit" value="Accedi" name="accedi">
+          <input class="btn btn-warning" type="submit" value="Accedi" name="accedi">
         </form>
         <p>Non ti sei ancora registrato? <a href="registrazione.php">Clicca qui!</a></p>
       </div>  

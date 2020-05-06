@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="css/registrazione.css"/>
+      <link rel="stylesheet" type="text/css" href="css/accesso.css"/>
   </head>
 
   <body class="container-fluid back">
@@ -24,7 +25,7 @@
       </div>
 
     </nav>
-     <div class="text-center exactCenter">
+     <div class="text-center exactCenter prova">
         <form method="POST" action="#">
             <div class="form-group">
               <label for="Nome">Nome:</label>
@@ -50,7 +51,7 @@
               <label for="Codice">Codice:</label>
               <input type="text" class="form-control" id="Codice" name="codice" required>
             </div>
-            <input class="btn btn-info" type="submit" name="registrati" value="Registrati">
+            <input class="btn btn-warning" type="submit" name="registrati" value="Registrati">
         </form>
        <p>Ti sei giá registrato? <a href="accesso.php">Clicca qui!</a></p>
     </div>
@@ -66,12 +67,12 @@
       $email=$_POST['email'];
       $codice=$_POST['codice'];
       $table=mysqli_query($db, "SELECT * 
-                                FROM Utente WHERE codice='$codice' AND 
+                                FROM utente WHERE codice='$codice' AND 
                                                   nome IS NULL");
       if($table)
         {
         $row = mysqli_fetch_array($table, MYSQLI_ASSOC);  	
-        mysqli_query($db, "UPDATE Utente 
+        mysqli_query($db, "UPDATE utente 
                            SET CF='$CF', nome = '$nome', cognome = '$cognome', password = '$password', email = '$email'
                            WHERE codice='$codice' ");
         header("Location:accesso.php");
