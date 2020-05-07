@@ -29,29 +29,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Votazioni
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#" onclick="showLink('links','availableVot')">Votazioni disponibili</a>
-              <a class="dropdown-item" href="#" onclick="showLink('links','endedVot')">Votazioni concluse</a>
-              <a class="dropdown-item" href="#" onclick="showLink('links','currentVot')">Votazioni in corso</a>
-              <div class="utente">
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" onclick="showLink('links','proposeVot')">Proponi votazione</a>
-              </div>
-              <div class="amministratore">
-              	<div class="dropdown-divider"></div>
-              	<a class="dropdown-item" href="#" onclick="showLink('links','createVot')">Crea votazione</a>
-                <a id="openInvite" class="dropdown-item"  href="#">Invita nuovo utente</a>   
-              </div>
-            </div>
-          </li>
-          <li class="nav-item active amministratore">
-            <a class="nav-link" href="#" onclick="showLink('links','showUser')">Utenti</a>
+            <a class="nav-link" href="paginaUtentePHP.php">Home</a>
           </li>
         </ul>
       </div>
@@ -63,7 +41,7 @@
         $credenziali=$_SESSION["credenziali"];
         $CF=$credenziali["CF"];
 
-        /*Codice che controlla le controlla le credenziali inserite, se l'utente é amministratore ecc*/
+        /*Codice che controlla le credenziali inserite, se l'utente é amministratore ecc*/
     	if(isset($_POST["partecipa"]))
         	{
             $actualQ=$_POST["choosenQ"];
