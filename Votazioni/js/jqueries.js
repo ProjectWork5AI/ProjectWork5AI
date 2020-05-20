@@ -17,4 +17,14 @@ $(document).ready(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+
+    $("#Titolo").focus(function () {
+        var value = $("#Titolo").val();
+        if (value.length > 0 && value != "Default text")
+            {
+            $("#proveremo").toggle();
+            }
+    });
+
+
 });

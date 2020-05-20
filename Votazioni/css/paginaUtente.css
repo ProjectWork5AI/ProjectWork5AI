@@ -9,8 +9,6 @@ h1
     margin-top: 4%;
 	}
 
-    
-
 nav
 	{
     border-radius: 5px;
@@ -20,6 +18,15 @@ nav
 	{
     display: none;
     }
+
+.prova {
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 1%;
+    box-shadow: 0 0 20px 2px black;
+    margin-left: 1.5vw;
+    margin-right: 1.5vw;
+}
 
 .utente
 	{
@@ -39,7 +46,7 @@ td>form
 .searchInput {
     background-image: url('searchicon.png'); /* Aggiunge l'icona della lente d'ingrandimento al campo di input */
     background-position: 10px 5px; /* Posiziona l'icona */
-    background-repeat: no-repeat; /* Fa sí che l'immagine non si ripeta */
+    background-repeat: no-repeat; /* Fa sï¿½ che l'immagine non si ripeta */
     width: 100%;
     font-size: 16px; 
     padding: 12px 20px 12px 40px; 

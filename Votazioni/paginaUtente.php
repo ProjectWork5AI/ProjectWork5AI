@@ -14,8 +14,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/scripts.js"></script>
     <script type="text/javascript" src="js/jqueries.js"></script>   
-  	<link rel="stylesheet" type="text/css" href="css/paginaUtente.css"/>
-    <link rel="stylesheet" type="text/css" href="css/accesso.css"/>
+  	<link rel="stylesheet" type="text/css" href="css/paginaUtente.css">
+    <link rel="stylesheet" type="text/css" href="css/accesso.css">
   </head>
 
   <body class="container-fluid back text-center">
@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="paginaUtente.php">Home</a>
+            <a class="nav-link" href="paginaUtente.php">Home </a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="bacheca.php">Bacheca</a>
@@ -68,11 +68,12 @@
     <br><br><br>
 
     <!--Form che permette di inserire i dati relativi alla creazione di una votazione-->
-    <div class="createVot proposeVot links text-center exactCenter prova">
+    <div class="createVot proposeVot links text-center prova">
         <form method="POST" action="paginaUtentePHP.php">
             <div class="form-group">
               <label for="Titolo">Titolo:</label>
               <input type="text" class="form-control" id="Titolo" name="titolo" required>
+              <p id="provacontrollo" style="display:none">proveremo</p>
             </div>
             <div class="form-group">
               <label for="Testo">Testo:</label>
@@ -126,8 +127,7 @@
           $credenziali=$_SESSION["credenziali"];
           $CF=$credenziali["CF"];
           $codice=user_code($db, $CF);
-          $votazioniT=votQuery($db, $codice, "in_corso", 0);
-
+          $votazioniT=votQuery($db, $codice, "in_corso' OR 'in_scadenza", 0);
           if($votazioniT!==NULL)
             {?>
             <div style="overflow-x:auto;">
@@ -145,6 +145,7 @@
                       for($votazioniR=mysqli_fetch_assoc($votazioniT);$votazioniR!=null;$votazioniR=mysqli_fetch_assoc($votazioniT))
                             {
                             ?>
+                            
                             <tr>
                                 <td>
                                     <?php echo $votazioniR["titolo"];?>
@@ -173,6 +174,7 @@
            else
             echo "Non sono disponibili nuove votazioni";
             ?>
+         
     </div>
 
     <!--Parte in cui viene creata la tabella con le votazioni concluse-->
@@ -217,7 +219,7 @@
 
                      <?php
                          require_once("commonFunctions.php");
-                         ended_current_vot($db, "in_corso");
+                         ended_current_vot($db, "in_corso' OR stato='in_scadenza");
                      ?>
 
                 </tbody>
@@ -427,40 +429,7 @@
               }
             
 
-        /**
-         *Funzione che esegue la query per ottenere il codice dell'utente.
-         *@param db, il database di riferimento.
-         *@param CF, il codice fiscale dell'utente di cui cercare il codice
-         */
-        function user_code($db, $CF)
-            {
-            $codiceT=mysqli_query($db, "SELECT codice
-                                        FROM utente
-                                        WHERE CF='$CF'");
-
-            $codiceR=mysqli_fetch_array($codiceT);
-            $codice=$codiceR[0];
-            return $codice;
-            }
-
-        /**
-         *Funzione che esegue la query per ottenere la tabella delle votazioni secondo determinati parametri.
-         *@param db, il database di riferimento.
-         *@param codice, il codice dell'utente.
-         *@param state, lo stato della votazione(0, conclusa; 1, in corso).
-         *@param present, se si cercano votazioni a cui l'utente era presente o meno(1 se presente, 0 se assente).
-         */
-        function votQuery($db, $codice, $state, $present)
-            {
-            $votazioniT=mysqli_query($db, "SELECT *
-                            		       FROM quesito JOIN partecipa
-                                                        ON partecipa.codice='$codice' AND  
-                                                           quesito.testoQ=partecipa.testoQ AND 
-                                                           presente='$present' AND
-                                                           stato='$state'");
-            return $votazioniT;
-            }
-
+        
          /**
          *Funzione che esegue la query per sapere se l'utente é amministratore o meno.
          *@param db, il database di riferimento.
@@ -479,7 +448,7 @@
         /**
          *Funzione che crea le tabelle delle votazioni concluse e in corso.
          *@param db, il database di riferimento.
-         *@param state, 0 se deve fare le votazioni concluse, 1 se deve fare quelle in corso.
+         *@param state, scaduta se deve fare le votazioni concluse, in_corso se deve fare quelle in corso in_scadenza.
          */
         function ended_current_vot($db, $state)
             {
